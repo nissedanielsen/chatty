@@ -8,33 +8,39 @@ const Chat = () => {
   const [userId, setUserId] = useState("");
   const [connected, setConnected] = useState(false);
   const [socketUrl, setSocketUrl] = useState(null);
-  const [allMessages, setAllMessages] = useState([]); // State to store both REST and WebSocket messages
+  const [messages, setMessages] = useState([]);
+  const [historicalMessagesLoaded, setHistoricalMessagesLoaded] = useState(false);
 
   const { messages: wsMessages, socket } = useWebSocket(socketUrl);
 
-  // Fetch messages from REST API
+  // Trigger this effect on start to fetch messages from db
   useEffect(() => {
-    if (chatId && connected) {
+    if (chatId && connected && !historicalMessagesLoaded) {
+      console.log("Calling db");
+      console.log("historial" + historicalMessagesLoaded)
       fetchMessages();
     }
-  }, [chatId, connected]);
+  }, [chatId, connected, historicalMessagesLoaded]);
 
   const fetchMessages = async () => {
     try {
-      const messages = await fetchMessagesByChatId(chatId); // Fetch messages from backend
-      console.log("Fetched messages:", messages); // Log the fetched messages
-      setAllMessages(messages); // Set the fetched messages into state
+      const fetchedMessages = await fetchMessagesByChatId(chatId);
+      console.log("Fetched messages:", fetchedMessages);
+      setMessages(fetchedMessages); 
+      setHistoricalMessagesLoaded(true);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
   };
 
-  // Use WebSocket messages and add them to the state when they come in
+  // Trigger this effect whenever WebSocket messages arrive
   useEffect(() => {
     if (wsMessages.length > 0) {
-      setAllMessages((prevMessages) => [...prevMessages, ...wsMessages]);
+      setMessages((prevMessages) => [...prevMessages, ...wsMessages]);
     }
-  }, [wsMessages]); // Trigger this effect whenever WebSocket messages arrive
+  }, [wsMessages]); 
+
+
 
   const handleConnect = () => {
     if (chatId.trim() && userId.trim()) {
@@ -70,7 +76,7 @@ const Chat = () => {
         <div>
           <h2>Chat Room: {chatId} - Username: {userId}</h2>
           <ul>
-            {allMessages.map((msg, index) => (
+            {messages.map((msg, index) => (
               <li key={index}>
                 <strong>{msg.senderId === userId ? "Me" : msg.senderId}:</strong> {msg.content}
                 <br /> 

@@ -11,13 +11,13 @@ const useWebSocket = (url) => {
     const ws = new WebSocket(url); // Create the WebSocket connection
     console.log("Attempting to connect to WebSocket:", url);
 
-    
+
     // Handle incoming messages
     ws.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
-        console.log("Received message:", message);  // Log the received message
-        setMessages((prevMessages) => [...prevMessages, message]);
+        console.log("Received message in websocket:", message);  // Log the received message
+        setMessages([message]); 
       } catch (error) {
         console.error("Error parsing WebSocket message:", error, event.data);
       }
