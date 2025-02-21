@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useWebSocket from "../services/useWebSocket"; 
 import SendMessageForm from "./SendMessageForm";
+import { fetchMessagesByChatId } from "../services/messageService";
 
 const Chat = () => {
   const [chatId, setChatId] = useState("");
@@ -9,6 +10,22 @@ const Chat = () => {
   const [socketUrl, setSocketUrl] = useState(null);
 
   const { messages, socket } = useWebSocket(socketUrl);
+
+  useEffect(() => {
+    if (chatId && connected) {
+      fetchMessages();
+    }
+  }, [chatId, connected]);
+
+  // Call the service to fetch messages and log them
+  const fetchMessages = async () => {
+    try {
+      const messages = await fetchMessagesByChatId(chatId); // Fetch messages from backend
+      console.log("Fetched messages:", messages); // Log the fetched messages
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
 
   const handleConnect = () => {
     if (chatId.trim() && userId.trim()) {
