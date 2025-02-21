@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import useWebSocket from "../services/useWebSocket"; 
 import SendMessageForm from "./SendMessageForm";
 import { fetchMessagesByChatId } from "../services/messageService";
+import ChatRoom from "./ChatRoom";
 
 const Chat = () => {
   const [chatId, setChatId] = useState("");
@@ -74,18 +75,7 @@ const Chat = () => {
         </div>
       ) : (
         <div>
-          <h2>Chat Room: {chatId} - Username: {userId}</h2>
-          <ul>
-            {messages.map((msg, index) => (
-              <li key={index}>
-                <strong>{msg.senderId === userId ? "Me" : msg.senderId}:</strong> {msg.content}
-                <br /> 
-                <small style={{ fontSize: "0.8em" }}>
-                  {new Date(msg.timestamp).toLocaleString()}
-                </small>
-              </li>
-            ))}
-          </ul>
+          <ChatRoom chatId={chatId} userId={userId} messages={messages} />
           <SendMessageForm socket={socket} userId={userId} chatId={chatId} />
         </div>
       )}
