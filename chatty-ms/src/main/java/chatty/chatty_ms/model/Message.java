@@ -28,6 +28,6 @@ public class Message {
     private String content;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime timestamp = LocalDateTime.now();
+    private String timestamp = LocalDateTime.now().toString();
 
 }

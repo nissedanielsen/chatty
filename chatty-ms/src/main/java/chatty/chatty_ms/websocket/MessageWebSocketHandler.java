@@ -50,7 +50,9 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
         // Store the session by chatId
         sessions.put(session.getId(), session);
         session.getAttributes().put("chatId", chatId);
-        session.sendMessage(new TextMessage("Connected to chat: " + chatId));
+
+        //TODO: handle initial message in client
+ //       session.sendMessage(new TextMessage("Connected to chat: " + chatId));
     }
 
     @Override
