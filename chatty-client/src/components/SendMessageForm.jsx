@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { TextField, Button, Box, Typography } from "@mui/material";
 
 const SendMessageForm = ({ socket, userId, chatId }) => {
   const [message, setMessage] = useState("");
@@ -7,28 +8,51 @@ const SendMessageForm = ({ socket, userId, chatId }) => {
     if (socket && message.trim()) {
       const msgObject = {
         chatId: chatId,
-        senderId: userId, // Include the senderId from the user input
+        senderId: userId, 
         content: message,
         timestamp: new Date().toISOString(),
       };
-      
+
       socket.send(JSON.stringify(msgObject));
-      setMessage(""); // Clear input after sending
+      setMessage(""); 
     } else {
       console.error("Cannot send an empty message!");
     }
   };
 
   return (
-    <div>
-      <input
-        type="text"
+    <Box
+      component="form"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      padding={2}
+      borderTop="1px solid #ddd"
+    >
+      <TextField
+        label="Type a message..."
+        variant="outlined"
+        fullWidth
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Type a message..."
+        sx={{
+          marginRight: 2,
+          backgroundColor: "#fff",
+        }}
       />
-      <button onClick={handleSendMessage}>Send</button>
-    </div>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSendMessage}
+        disabled={!message.trim()}
+        sx={{
+          minWidth: 100,
+          fontWeight: 'bold',
+        }}
+      >
+        Send
+      </Button>
+    </Box>
   );
 };
 

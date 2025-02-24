@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import useWebSocket from "../services/useWebSocket"; 
 import SendMessageForm from "./SendMessageForm";
-import { fetchMessagesByChatId } from "../services/messageService";
 import ChatRoom from "./ChatRoom";
+import ChatJoin from "./ChatJoin";
+import { fetchMessagesByChatId } from "../services/messageService";
 
 const Chat = () => {
   const [chatId, setChatId] = useState("");
@@ -57,21 +58,14 @@ const Chat = () => {
   return (
     <div>
       {!connected ? (
-        <div>
-          <h2>Enter Chat Details</h2>
-          <input
-            type="text"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-            placeholder="Enter your username..."
-          />
-          <input
-            type="text"
-            value={chatId}
-            onChange={(e) => setChatId(e.target.value)}
-            placeholder="Enter chat ID..."
-          />
-          <button onClick={handleConnect}>Join Chat</button>
+      <div>
+      <ChatJoin
+                userId={userId}
+                setUserId={setUserId}
+                chatId={chatId}
+                setChatId={setChatId}
+                onJoinChat={handleConnect}
+              />
         </div>
       ) : (
         <div>

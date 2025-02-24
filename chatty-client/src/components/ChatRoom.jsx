@@ -1,10 +1,24 @@
 import Message from "./Message";
+import { Box } from "@mui/material";
+import ChatRoomHeader from "./ChatRoomHeader";
 
 const ChatRoom = ({ chatId, userId, messages }) => {
   return (
-    <div>
-      <h2>Chat Room: {chatId} - Username: {userId}</h2>
-      <ul>
+    <Box sx={{ padding: 2, minHeight: '100vh', backgroundColor: '#f4f4f4' }}>
+      {/* Chat Room Header Component */}
+      <ChatRoomHeader chatId={chatId} userId={userId} />
+
+      {/* Messages List */}
+      <Box
+        component="ul"
+        sx={{
+          listStyleType: "none",
+          paddingLeft: 0,
+          marginBottom: 3,
+          maxHeight: '60vh',
+          overflowY: 'auto',
+        }}
+      >
         {messages.map((msg, index) => (
           <Message
             key={index}
@@ -14,8 +28,8 @@ const ChatRoom = ({ chatId, userId, messages }) => {
             userId={userId}
           />
         ))}
-      </ul>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
