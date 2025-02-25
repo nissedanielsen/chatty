@@ -1,5 +1,7 @@
 package chatty.chatty_ms.service;
 
+import chatty.chatty_ms.model.HuggingFaceRequest;
+import chatty.chatty_ms.model.HuggingFaceResponse;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -13,25 +15,21 @@ public class HuggingFaceService {
         this.restTemplate = new RestTemplate();
     }
 
-    public String getResponseFromModel(String userMessage) {
+    public String getResponseFromModel(HuggingFaceRequest request) {
 
         //TODO: REFACTOR EVERYTHING
         String url = "http://huggingface:5000/generate";
 
-        String jsonRequest = "{\"input\": \"" + userMessage + "\"}";
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<String> entity = new HttpEntity<>(jsonRequest, headers);
+        HttpEntity<HuggingFaceRequest> entity = new HttpEntity<>(request, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(
-                url, HttpMethod.POST, entity, String.class);
+        ResponseEntity<HuggingFaceResponse> response = restTemplate.exchange(
+                url, HttpMethod.POST, entity, HuggingFaceResponse.class);
 
+        return response.getBody() != null ? response.getBody().getResponse() : null;
 
-        String responseBody = response.getBody();
-
-        return responseBody.substring(responseBody.indexOf("\"response\":\"") + 11, responseBody.indexOf("\"}", responseBody.indexOf("\"response\":\"")));
 
     }
 }

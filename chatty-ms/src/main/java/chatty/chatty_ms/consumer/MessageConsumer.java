@@ -1,10 +1,13 @@
 package chatty.chatty_ms.consumer;
 
+import chatty.chatty_ms.model.HuggingFaceRequest;
 import chatty.chatty_ms.model.Message;
 import chatty.chatty_ms.service.HuggingFaceService;
+import chatty.chatty_ms.service.MessageService;
 import chatty.chatty_ms.websocket.MessageWebSocketHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.cglib.core.Local;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
@@ -18,10 +21,12 @@ import java.util.Map;
 public class MessageConsumer {
 
     private final HuggingFaceService huggingFaceService;
+    private final MessageService messageService;
     private final ObjectMapper objectMapper;
 
-    public MessageConsumer(HuggingFaceService huggingFaceService, ObjectMapper objectMapper) {
+    public MessageConsumer(HuggingFaceService huggingFaceService, MessageService messageService, ObjectMapper objectMapper) {
         this.huggingFaceService = huggingFaceService;
+        this.messageService = messageService;
         this.objectMapper = objectMapper;
     }
 
@@ -35,19 +40,7 @@ public class MessageConsumer {
         broadcastMessageToClients(chatId, messageJson);
 
         if (message.getContent().contains("@bot")) {
-            String contentForBot = message.getContent().substring(4).trim();
-            String contentFromBot = huggingFaceService.getResponseFromModel(contentForBot);
-
-            Message newMessage = Message.builder()
-                    .chatId(chatId)
-                    .senderId("@bot")
-                    .content(contentFromBot)
-                    .timestamp(LocalDateTime.now().toString())
-                    .build();
-            String botMessageJson = objectMapper.writeValueAsString(newMessage);
-
-            // send the bot's response to all clients
-            broadcastMessageToClients(chatId, botMessageJson);
+            handleBotResponse(chatId, message);
         }
 
     }
@@ -64,5 +57,27 @@ public class MessageConsumer {
                     session.sendMessage(new TextMessage(message));
             }
         }
+    }
+
+    private void handleBotResponse(String chatId, Message message) throws IOException {
+        String contentForBot = message.getContent().substring(4).trim();
+        String contentFromBot = huggingFaceService.getResponseFromModel(new HuggingFaceRequest(contentForBot));
+
+        Message newMessage = Message.builder()
+                .chatId(chatId)
+                .senderId("@bot")
+                .content(contentFromBot)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        //TODO: Fix issue with save of bot-message
+
+        // make sure to use message received from repository since it contains timestamp and generated ID
+        // Message botMessage = messageService.saveMessage(newMessage);
+
+        String botMessageJson = objectMapper.writeValueAsString(newMessage);
+
+        // send the bot's response to all clients
+        broadcastMessageToClients(chatId, botMessageJson);
     }
 }

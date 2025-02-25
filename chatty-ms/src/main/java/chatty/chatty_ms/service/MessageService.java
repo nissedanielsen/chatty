@@ -15,8 +15,8 @@ public class MessageService {
         this.messageRepository = messageRepository;
     }
 
-    public void saveMessage(Message message) {
-        messageRepository.save(message);
+    public Message saveMessage(Message message) {
+        return messageRepository.save(message);
     }
 
     public List<Message> getMessagesByChatId(String chatId) {
