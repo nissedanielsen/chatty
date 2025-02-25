@@ -9,11 +9,11 @@ const SendMessageForm = ({ socket, userId, chatId }) => {
       const msgObject = {
         chatId: chatId,
         senderId: userId, 
-        content: message,
-        timestamp: new Date().toISOString(),
+        content: message
       };
 
       socket.send(JSON.stringify(msgObject));
+      console.log("sending message:" + JSON.stringify(msgObject))
       setMessage(""); 
     } else {
       console.error("Cannot send an empty message!");

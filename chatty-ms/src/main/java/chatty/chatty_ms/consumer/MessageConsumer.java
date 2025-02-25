@@ -7,14 +7,12 @@ import chatty.chatty_ms.service.MessageService;
 import chatty.chatty_ms.websocket.MessageWebSocketHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.springframework.cglib.core.Local;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -67,7 +65,6 @@ public class MessageConsumer {
                 .chatId(chatId)
                 .senderId("@bot")
                 .content(contentFromBot)
-                .timestamp(LocalDateTime.now().toString())
                 .build();
 
         //TODO: Fix issue with save of bot-message
