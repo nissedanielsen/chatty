@@ -13,6 +13,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -59,12 +60,13 @@ public class MessageConsumer {
 
     private void handleBotResponse(String chatId, Message message) throws IOException {
         String contentForBot = message.getContent().substring(4).trim();
-        String contentFromBot = huggingFaceService.getResponseFromModel(new HuggingFaceRequest(contentForBot));
+        String contentFromBot = huggingFaceService.getResponseFromModel(new HuggingFaceRequest(contentForBot)).getResponse();
 
         Message newMessage = Message.builder()
                 .chatId(chatId)
                 .senderId("@bot")
                 .content(contentFromBot)
+                .timestamp(LocalDateTime.now().toString())
                 .build();
 
         //TODO: Fix issue with save of bot-message

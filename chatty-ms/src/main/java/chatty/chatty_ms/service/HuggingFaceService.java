@@ -15,7 +15,7 @@ public class HuggingFaceService {
         this.restTemplate = new RestTemplate();
     }
 
-    public String getResponseFromModel(HuggingFaceRequest request) {
+    public HuggingFaceResponse getResponseFromModel(HuggingFaceRequest request) {
 
         //TODO: REFACTOR EVERYTHING
         String url = "http://huggingface:5000/generate";
@@ -28,7 +28,7 @@ public class HuggingFaceService {
         ResponseEntity<HuggingFaceResponse> response = restTemplate.exchange(
                 url, HttpMethod.POST, entity, HuggingFaceResponse.class);
 
-        return response.getBody() != null ? response.getBody().getResponse() : null;
+        return response.getBody() != null ? response.getBody() : null;
 
 
     }
