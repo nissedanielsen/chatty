@@ -66,7 +66,6 @@ public class MessageConsumer {
                 .chatId(chatId)
                 .senderId("@bot")
                 .content(contentFromBot)
-                .timestamp(LocalDateTime.now().toString())
                 .build();
 
         // make sure to use message received from repository since it contains timestamp and generated ID
