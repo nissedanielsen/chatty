@@ -3,6 +3,7 @@ package chatty.chatty_ms.service;
 import chatty.chatty_ms.Repository.MessageRepository;
 import chatty.chatty_ms.model.Message;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class MessageService {
         this.messageRepository = messageRepository;
     }
 
+    @Transactional
     public Message saveMessage(Message message) {
         return messageRepository.save(message);
     }

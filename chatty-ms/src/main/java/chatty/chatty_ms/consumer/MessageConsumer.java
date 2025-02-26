@@ -69,12 +69,10 @@ public class MessageConsumer {
                 .timestamp(LocalDateTime.now().toString())
                 .build();
 
-        //TODO: Fix issue with save of bot-message
-
         // make sure to use message received from repository since it contains timestamp and generated ID
-        // Message botMessage = messageService.saveMessage(newMessage);
+         Message botMessage = messageService.saveMessage(newMessage);
 
-        String botMessageJson = objectMapper.writeValueAsString(newMessage);
+        String botMessageJson = objectMapper.writeValueAsString(botMessage);
 
         // send the bot's response to all clients
         broadcastMessageToClients(chatId, botMessageJson);
