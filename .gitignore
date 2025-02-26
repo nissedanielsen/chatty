@@ -1,0 +1,70 @@
+# Ignore build files
+target
+build
+node_modules
+
+# Java
+.class
+.jar
+.war
+.ear
+.db
+.log
+.sql
+.jmx
+.idea
+.vscode
+.iml
+.h2.db
+.h2.log
+
+# Spring Boot specific
+.log
+spring-boot-devtools.jar
+.jar.original
+.jarsigner
+
+# Maven
+.mvn
+mvnw
+mvnw.cmd
+
+# Gradle
+.gradle
+gradle
+gradlew
+gradlew.bat
+
+# Eclipse
+.settings
+.project
+.classpath
+
+# IntelliJ IDEA
+.idea
+.iml
+.iws
+
+# React
+node_modules
+dist
+build
+public
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Temporary files
+.swp
+.swo
+.tmp
+
+# Logs
+.log
+
+# IDE specific files
+.idea
+.vscode
