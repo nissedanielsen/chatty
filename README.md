@@ -43,8 +43,8 @@ To run the entire system locally using Docker Compose, follow these steps (ensur
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/nissedanielsen/EventMonitor.git
-    cd EventMonitor
+    git clone https://github.com/nissedanielsen/chatty.git
+    cd chatty
     ```
 
 2. **Build and start the services using Docker Compose:**
