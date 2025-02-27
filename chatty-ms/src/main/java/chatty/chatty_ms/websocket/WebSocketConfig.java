@@ -14,11 +14,9 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 public class WebSocketConfig implements WebSocketConfigurer {
 
     private final MessageProducer messageProducer;
-    private final MessageService messageService;
 
-    public WebSocketConfig(MessageProducer messageProducer, MessageService messageService) {
+    public WebSocketConfig(MessageProducer messageProducer) {
         this.messageProducer = messageProducer;
-        this.messageService = messageService;
     }
 
     @Override
@@ -28,7 +26,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Bean
     public MessageWebSocketHandler webSocketHandler() {
-        return new MessageWebSocketHandler(messageProducer, messageService);
+        return new MessageWebSocketHandler(messageProducer);
     }
 
 }
