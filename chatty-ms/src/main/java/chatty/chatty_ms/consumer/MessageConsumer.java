@@ -13,7 +13,6 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -33,10 +32,12 @@ public class MessageConsumer {
     public void listen(ConsumerRecord<String, Message> record) throws IOException {
         String chatId = record.key();
         Message message = record.value();
-        String messageJson = objectMapper.writeValueAsString(message);
+
+        // save message to db
+        Message savedMessage = messageService.saveMessage(message);
 
         // send message to clients
-        broadcastMessageToClients(chatId, messageJson);
+        broadcastMessageToClients(chatId, savedMessage);
 
         if (message.getContent().contains("@bot")) {
             handleBotResponse(chatId, message);
@@ -44,16 +45,18 @@ public class MessageConsumer {
 
     }
 
-    private void broadcastMessageToClients(String chatId, String message) throws IOException {
+    private void broadcastMessageToClients(String chatId, Message message) throws IOException {
+        String messageJson = objectMapper.writeValueAsString(message);
+
         // Retrieve active WebSocket sessions
-        System.out.println("broadcasting message: " + message);
+        System.out.println("broadcasting message: " + messageJson);
         Map<String, WebSocketSession> sessions = MessageWebSocketHandler.getSessions();
 
         for (WebSocketSession session : sessions.values()) {
 
             String sessionChatId = (String) session.getAttributes().get("chatId");
             if (sessionChatId.equals(chatId)) {
-                    session.sendMessage(new TextMessage(message));
+                    session.sendMessage(new TextMessage(messageJson));
             }
         }
     }
@@ -68,12 +71,10 @@ public class MessageConsumer {
                 .content(contentFromBot)
                 .build();
 
-        // make sure to use message received from repository since it contains timestamp and generated ID
+        // make sure to use message received from repository since it contains generated ID and timestamp
          Message botMessage = messageService.saveMessage(newMessage);
 
-        String botMessageJson = objectMapper.writeValueAsString(botMessage);
-
         // send the bot's response to all clients
-        broadcastMessageToClients(chatId, botMessageJson);
+        broadcastMessageToClients(chatId, botMessage);
     }
 }

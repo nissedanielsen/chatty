@@ -2,7 +2,6 @@ package chatty.chatty_ms.websocket;
 
 import chatty.chatty_ms.model.Message;
 import chatty.chatty_ms.producer.MessageProducer;
-import chatty.chatty_ms.service.MessageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
@@ -18,25 +17,19 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
 
     private final MessageProducer messageProducer;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final MessageService messageService;
 
     // Stores active WebSocket sessions mapped by chatId
     @Getter
     private static final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
-    public MessageWebSocketHandler(MessageProducer messageProducer,
-                                   MessageService messageService) {
+    public MessageWebSocketHandler(MessageProducer messageProducer) {
         this.messageProducer = messageProducer;
-        this.messageService = messageService;
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
         Message chatMessage = objectMapper.readValue(message.getPayload(), Message.class);
         System.out.println("Received in WebSocket: " + chatMessage);
-
-        // Save in db
-        messageService.saveMessage(chatMessage);
 
         // Send message to Kafka
         messageProducer.sendMessage(chatMessage);

@@ -29,7 +29,12 @@ public class Message {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false, updatable = false)
-    private String timestamp = LocalDateTime.now().toString();
+    @Column(nullable = true, updatable = false)
+    private String timestamp;
 
+    @PrePersist
+    public void setTimestamp() {
+        //make sure timestamp is always current time
+        timestamp = LocalDateTime.now().toString();
+    }
 }
