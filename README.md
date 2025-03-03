@@ -23,6 +23,7 @@ Chatty is a real-time chat application with AI bot capabilities. Users can engag
 - Real-time messaging through WebSockets
 - Message persistence in PostgreSQL database
 - AI bot integration via the `@bot` command
+- JWT authetication
 
 # System Architecture
 1. Users connect to the system via WebSockets.
