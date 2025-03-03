@@ -22,7 +22,8 @@ Chatty is a real-time chat application with AI bot capabilities. Users can engag
 # Features
 - Real-time messaging through WebSockets
 - Message persistence in PostgreSQL database
-- AI bot integration via the `@bot` command
+- AI bot integration via the `@bot` command 
+- JWT authetication
 
 # System Architecture
 1. Users connect to the system via WebSockets.
@@ -51,3 +52,28 @@ To run the entire system locally using Docker Compose, follow these steps:
     ```bash
     docker-compose up --build
     ```
+---
+# Services
+
+### 1. **chatty-kafka** (Kafka Broker)
+   - **Ports**: `9092` (Access via `localhost:9092`)
+
+### 2. **zookeeper** (Zookeeper for Kafka)
+   - **Ports**: `2181` (Access via `localhost:2181`)
+
+### 3. **postgres** (PostgreSQL Database)
+   - **Ports**: `5432` (Access via `localhost:5432`)
+   - **Environment Variables**:
+     - `POSTGRES_DB`: `chatdb`
+     - `POSTGRES_USER`: `chatuser`
+     - `POSTGRES_PASSWORD`: `chatpass`
+
+### 4. **chatty-ms** (Spring Boot Backend)
+   - **Ports**: `8090` (Access via `localhost:8090`)
+   - **Authentication**: The backend uses a mocked database for authentication preloaded with 10 users (`user1`, `user2`, ..., `user10`), each with the password `password`, for JWT authentication on the login endpoint. JWTs are valid for 1 day.
+
+### 5. **chatty-client** (React Frontend)
+   - **Ports**: `80` (Access via `localhost:80`)
+
+### 6. **huggingface** (AI Bot Interaction - Flask API)
+   - **Ports**: `5000` (Access via `localhost:5000`)
