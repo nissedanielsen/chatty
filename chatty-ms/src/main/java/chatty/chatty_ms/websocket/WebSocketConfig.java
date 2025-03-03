@@ -1,7 +1,6 @@
 package chatty.chatty_ms.websocket;
 
 import chatty.chatty_ms.producer.MessageProducer;
-import chatty.chatty_ms.service.MessageService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;

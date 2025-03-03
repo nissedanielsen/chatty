@@ -39,7 +39,7 @@ Chatty is a real-time chat application with AI bot capabilities. Users can engag
 - Git
 
 ## Running the Application Using Docker Compose
-To run the entire system locally using Docker Compose, follow these steps (ensure that the backend is built and the JAR file is generated in the target directory).
+To run the entire system locally using Docker Compose, follow these steps:
 
 1. **Clone the repository:**
     ```bash
