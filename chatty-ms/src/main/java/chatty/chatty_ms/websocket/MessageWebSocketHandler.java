@@ -56,7 +56,8 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
 
     private String extractChatId(WebSocketSession session) {
         String uri = session.getUri().toString();
-        return uri.substring(uri.lastIndexOf("/") + 1);
+        String path = uri.substring(uri.lastIndexOf("/") + 1);
+        return path.contains("?") ? path.substring(0, path.indexOf("?")) : path;
     }
 
 }

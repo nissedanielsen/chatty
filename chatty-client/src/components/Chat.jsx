@@ -16,7 +16,8 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [historicalMessagesLoaded, setHistoricalMessagesLoaded] = useState(false);
 
-  const { messages: wsMessages, socket } = useWebSocket(socketUrl);
+  const token = localStorage.getItem("token");
+  const { messages: wsMessages, socket } = useWebSocket(socketUrl, token);
 
   // Check if token exists on component mount and redirect if not
   useEffect(() => {

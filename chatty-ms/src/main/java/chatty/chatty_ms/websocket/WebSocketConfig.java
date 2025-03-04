@@ -13,14 +13,18 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 public class WebSocketConfig implements WebSocketConfigurer {
 
     private final MessageProducer messageProducer;
+    private final JwtHandshakeInterceptor jwtHandshakeInterceptor;
 
-    public WebSocketConfig(MessageProducer messageProducer) {
+    public WebSocketConfig(MessageProducer messageProducer, JwtHandshakeInterceptor jwtHandshakeInterceptor) {
         this.messageProducer = messageProducer;
+        this.jwtHandshakeInterceptor = jwtHandshakeInterceptor;
     }
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketHandler(), "/ws/joinchat/{chatId}").setAllowedOrigins("*");
+        registry.addHandler(webSocketHandler(), "/ws/joinchat/{chatId}")
+                .setAllowedOrigins("*")
+                .addInterceptors(jwtHandshakeInterceptor);;
     }
 
     @Bean

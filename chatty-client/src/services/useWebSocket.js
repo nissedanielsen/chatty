@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 
-const useWebSocket = (url) => {
+const useWebSocket = (url, token) => {
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
 
-    if (!url) return;
+    if (!url || !token) return;
+    const wsUrl = `${url}?token=${token}`;
 
-    const ws = new WebSocket(url); // Create the WebSocket connection
+    const ws = new WebSocket(wsUrl); // Create the WebSocket connection
     console.log("Attempting to connect to WebSocket:", url);
 
 
