@@ -1,7 +1,7 @@
 
 # Chatty
 
-Chatty is a real-time chat application with AI bot capabilities. Users can engage in conversations and interact with an LLM-powered bot using the `@bot` command.
+Chatty is a real-time chat application with AI bot capabilities. Clients establish a handshake via WebSocket for real-time communication, and messages are processed through Kafka events. Users can engage in conversations and interact with an LLM-powered bot using the `@bot` command.
 
 # Tech Stack
 
@@ -70,7 +70,7 @@ To run the entire system locally using Docker Compose, follow these steps:
 
 ### 4. **chatty-ms** (Spring Boot Backend)
    - **Ports**: `8090` (Access via `localhost:8090`)
-   - **Authentication**: The backend uses a mocked database for authentication preloaded with 10 users (`user1`, `user2`, ..., `user10`), each with the password `password`, for JWT authentication on the login endpoint. JWTs are valid for 1 day.
+   - **Authentication**: The backend uses a JWT-based authentication flow. A JWT can be obtained from the `auth/login` endpoint upon successful authentication. Postgres db is preloaded with 10 users (`user1`, `user2`, ..., `user10`), each with the password `password`, password is salted and hashed. JWTs are valid for 1 day.
 
 ### 5. **chatty-client** (React Frontend)
    - **Ports**: `80` (Access via `localhost:80`)
