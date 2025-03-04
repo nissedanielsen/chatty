@@ -4,7 +4,6 @@ import com.nimbusds.jose.JOSEException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class JwtAuthenticationController {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final CustomUserDetailsService userDetailsService;
+    private final UserService userService;
 
 
-    public JwtAuthenticationController(JwtTokenProvider jwtTokenProvider, CustomUserDetailsService userDetailsService) {
+    public JwtAuthenticationController(JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.jwtTokenProvider = jwtTokenProvider;
-        this.userDetailsService = userDetailsService;
+        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -28,15 +27,15 @@ public class JwtAuthenticationController {
         try {
 
             //fetch user by username
-            UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
+            User user = userService.loadUserByUsername(loginRequest.getUsername());
 
             //validate login credentials
-            if(!userDetailsService.validateCredentials(loginRequest.getUsername(), loginRequest.getPassword())){
+            if(!userService.validateCredentials(loginRequest.getUsername(), loginRequest.getPassword())){
                 throw new BadCredentialsException("Invalid password");
             }
 
             // generate token with username
-            String jwtToken = jwtTokenProvider.generateToken(userDetails.getUsername());
+            String jwtToken = jwtTokenProvider.generateToken(user.getUsername());
 
             return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken));
         } catch (BadCredentialsException e) {
