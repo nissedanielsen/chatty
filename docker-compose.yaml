@@ -52,6 +52,8 @@ services:
     depends_on:
       - chatty-kafka
       - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker 
 
   chatty-client:
     build:
