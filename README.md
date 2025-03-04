@@ -1,7 +1,7 @@
 
 # Chatty
 
-Chatty is a real-time chat application with AI bot capabilities. Clients establish a handshake via WebSocket for real-time communication, and messages are processed through Kafka events. Users can engage in conversations and interact with an LLM-powered bot using the `@bot` command.
+Chatty is a real-time chat application with AI bot capabilities. Clients establish a handshake via WebSocket for real-time communication, and messages are processed through Kafka events. PostgreSQL handles message persistence.Also, users can engage in conversations and interact with an LLM-powered bot using the `@bot` command.
 
 # Tech Stack
 
