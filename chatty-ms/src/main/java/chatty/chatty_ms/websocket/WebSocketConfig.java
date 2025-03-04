@@ -1,7 +1,5 @@
 package chatty.chatty_ms.websocket;
 
-import chatty.chatty_ms.producer.MessageProducer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -12,24 +10,19 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
-    private final MessageProducer messageProducer;
     private final JwtHandshakeInterceptor jwtHandshakeInterceptor;
+    private final MessageWebSocketHandler messageWebSocketHandler;
 
-    public WebSocketConfig(MessageProducer messageProducer, JwtHandshakeInterceptor jwtHandshakeInterceptor) {
-        this.messageProducer = messageProducer;
+    public WebSocketConfig( JwtHandshakeInterceptor jwtHandshakeInterceptor, MessageWebSocketHandler messageWebSocketHandler) {
         this.jwtHandshakeInterceptor = jwtHandshakeInterceptor;
+        this.messageWebSocketHandler = messageWebSocketHandler;
     }
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketHandler(), "/ws/joinchat/{chatId}")
+        registry.addHandler(messageWebSocketHandler, "/ws/joinchat/{chatId}")
                 .setAllowedOrigins("*")
                 .addInterceptors(jwtHandshakeInterceptor);;
-    }
-
-    @Bean
-    public MessageWebSocketHandler webSocketHandler() {
-        return new MessageWebSocketHandler(messageProducer);
     }
 
 }
