@@ -4,6 +4,7 @@ import chatty.chatty_ms.model.HuggingFaceRequest;
 import chatty.chatty_ms.model.Message;
 import chatty.chatty_ms.service.HuggingFaceService;
 import chatty.chatty_ms.service.MessageService;
+import chatty.chatty_ms.service.UserChatService;
 import chatty.chatty_ms.websocket.MessageWebSocketHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -21,17 +22,22 @@ public class MessageConsumer {
     private final HuggingFaceService huggingFaceService;
     private final MessageService messageService;
     private final ObjectMapper objectMapper;
+    private final UserChatService userChatService;
 
-    public MessageConsumer(HuggingFaceService huggingFaceService, MessageService messageService, ObjectMapper objectMapper) {
+    public MessageConsumer(HuggingFaceService huggingFaceService, MessageService messageService, ObjectMapper objectMapper, UserChatService userChatService) {
         this.huggingFaceService = huggingFaceService;
         this.messageService = messageService;
         this.objectMapper = objectMapper;
+        this.userChatService = userChatService;
     }
 
     @KafkaListener(topics = "chat-messages", groupId = "chat-group")
     public void listen(ConsumerRecord<String, Message> record) throws IOException {
         String chatId = record.key();
         Message message = record.value();
+
+        // save the chatroom
+        userChatService.saveIfNotExists(message.getSenderId(), chatId);
 
         // save message to db
         Message savedMessage = messageService.saveMessage(message);
