@@ -1,4 +1,4 @@
-package chatty.chatty_ms.security;
+package chatty.chatty_ms.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

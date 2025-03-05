@@ -1,5 +1,7 @@
-package chatty.chatty_ms.security;
+package chatty.chatty_ms.service;
 
+import chatty.chatty_ms.Repository.UserRepository;
+import chatty.chatty_ms.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;

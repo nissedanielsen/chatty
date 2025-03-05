@@ -1,5 +1,7 @@
 package chatty.chatty_ms.security;
 
+import chatty.chatty_ms.model.User;
+import chatty.chatty_ms.service.UserService;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

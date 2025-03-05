@@ -1,5 +1,8 @@
-package chatty.chatty_ms.security;
+package chatty.chatty_ms.config;
 
+import chatty.chatty_ms.Repository.UserRepository;
+import chatty.chatty_ms.model.User;
+import chatty.chatty_ms.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
