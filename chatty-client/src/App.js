@@ -8,7 +8,7 @@ import Login from './components/Login.jsx'
 function App() {
   // Function to check if user is authenticated
   const isAuthenticated = () => {
-    return localStorage.getItem("token") !== null;
+    return sessionStorage.getItem("token") !== null;
   };
 
   return (

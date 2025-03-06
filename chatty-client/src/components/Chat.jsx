@@ -8,20 +8,20 @@ import { logout } from "../services/authService";
 import { TextField, Button, Paper, Box, Typography } from "@mui/material";
 
 const Chat = () => {
-  // Get userId from localStorage on component mount
+  // Get userId from sessionStorage on component mount
   const [chatId, setChatId] = useState("");
-  const [userId, setUserId] = useState(localStorage.getItem("userId") || "");
+  const [userId, setUserId] = useState(sessionStorage.getItem("userId") || "");
   const [connected, setConnected] = useState(false);
   const [socketUrl, setSocketUrl] = useState(null);
   const [messages, setMessages] = useState([]);
   const [historicalMessagesLoaded, setHistoricalMessagesLoaded] = useState(false);
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const { messages: wsMessages, socket } = useWebSocket(socketUrl, token);
 
   // Check if token exists on component mount and redirect if not
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       window.location.href = "/login";
     }

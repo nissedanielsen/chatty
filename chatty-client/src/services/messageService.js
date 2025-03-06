@@ -15,7 +15,7 @@ export const fetchMessagesByChatId = async (chatId) => {
     if (!response.ok) {
       if (response.status === 401) {
         // Unauthorized - token might be invalid or expired
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
         window.location.href = "/login";
         throw new Error("Session expired. Please login again.");
       }
@@ -44,7 +44,7 @@ export const sendMessage = async (messageData) => {
     
     if (!response.ok) {
       if (response.status === 401) {
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
         window.location.href = "/login";
         throw new Error("Session expired. Please login again.");
       }

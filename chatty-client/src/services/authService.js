@@ -20,8 +20,8 @@ export const login = async (username, password) => {
     console.log("jwt: " + data.token)
 
     // Store token from auth-call and form from client
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("userId", username); 
+    sessionStorage.setItem("token", data.token);
+    sessionStorage.setItem("userId", username); 
     
     return data;
   } catch (error) {
@@ -32,14 +32,14 @@ export const login = async (username, password) => {
 
 // Logout function
 export const logout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("userId");
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("userId");
   window.location.href = "/login";
 };
 
 // Get auth header with token for API requests
 export const authHeader = () => {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   
   if (token) {
     return { Authorization: `Bearer ${token}` };
