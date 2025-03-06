@@ -49,7 +49,6 @@ gradlew.bat
 node_modules
 dist
 build
-public
 
 # MacOS
 .DS_Store
